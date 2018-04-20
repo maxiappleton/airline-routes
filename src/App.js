@@ -3,6 +3,7 @@ import './App.css';
 
 import data, { getAirportByCode, getAirlineById } from './data';
 import Table from './components/Table';
+import Select from './components/Select';
 
 class App extends Component {
   constructor(props) {
@@ -13,7 +14,7 @@ class App extends Component {
     };
 
     this.handleAirlineSelect = this.handleAirlineSelect.bind(this);
-    this.filteredRoutes = this.filteredRoutes.bind(this);
+    this.filterRoutes = this.filterRoutes.bind(this);
   }
 
   formatValue = (property, value) => {
@@ -31,7 +32,7 @@ class App extends Component {
   // const routes = [
   //   { "airline": 24, "src": "DFW", "dest": "XNA" },
 
-  filteredRoutes() {
+  filterRoutes() {
     if (this.state.airline === 'all') {
       return data.routes;
     } else {
@@ -41,6 +42,10 @@ class App extends Component {
     }
   }
 
+  filterAirlines() {
+    return data.airlines;
+  }
+
   render() {
     const columns = [
       { name: 'Airline', property: 'airline' },
@@ -48,7 +53,8 @@ class App extends Component {
       { name: 'Destination Airport', property: 'dest' },
     ];
 
-    const rows = this.filteredRoutes();
+    const filteredRoutes = this.filterRoutes();
+    const filteredAirlines = this.filterAirlines();
 
     return (
       <div className="app">
@@ -56,12 +62,20 @@ class App extends Component {
           <h1 className="title">Airline Routes</h1>
         </header>
         <section>
-          <select value={this.state.airline} onChange={this.handleAirlineSelect}>
-            {data.airlines.map((airline) => {
-              return <option key={airline.id} value={airline.id}>{airline.name}</option>
-            })}
-          </select>
-          <Table columns={columns} rows={rows} format={this.formatValue} perPage={25} />
+          <Select
+            options={filteredAirlines}
+            valueKey="id"
+            titleKey="name"
+            allTitle="All Airlines"
+            value={this.state.airline}
+            onSelect={this.handleAirlineSelect}
+          />
+          <Table
+            columns={columns}
+            rows={filteredRoutes}
+            format={this.formatValue}
+            perPage={25}
+          />
         </section>
       </div>
     );
