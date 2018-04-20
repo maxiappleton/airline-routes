@@ -88,7 +88,6 @@ class App extends Component {
       const possibleRoutes = data.routes.filter(route => {
         return route.airline === Number(this.state.airline);
       });
-
       const airportCodes = [];
       possibleRoutes.forEach(route => airportCodes.push(route.src, route.dest));
       const uniqAirportCodes = _.uniq(airportCodes);
