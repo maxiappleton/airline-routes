@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import './App.css';
 
 import data, { getAirportByCode, getAirlineById } from './data';
@@ -62,7 +63,16 @@ class App extends Component {
     if (this.state.airport === 'all') {
       return data.airlines;
     } else {
-      return data.airlines;
+      const possibleRoutes = data.routes.filter(route => {
+        return route.src === this.state.airport || route.dest === this.state.airport;
+      });
+
+      const airlineIds = possibleRoutes.map(route => route.airline);
+      const uniqAirlineIds = _.uniq(airlineIds);
+
+      return data.airlines.filter(airline => {
+        return uniqAirlineIds.includes(airline.id);
+      });
     }
   }
 
@@ -70,7 +80,17 @@ class App extends Component {
     if (this.state.airline === 'all') {
       return data.airports;
     } else {
-      return data.airports;
+      const possibleRoutes = data.routes.filter(route => {
+        return route.airline === Number(this.state.airline);
+      });
+
+      const airportCodes = [];
+      possibleRoutes.forEach(route => airportCodes.push(route.src, route.dest));
+      const uniqAirportCodes = _.uniq(airportCodes);
+
+      return data.airports.filter(airport => {
+        return uniqAirportCodes.includes(airport.code);
+      });
     }
   }
 
@@ -81,12 +101,9 @@ class App extends Component {
       { name: 'Destination Airport', property: 'dest' },
     ];
 
-
+    const filteredRoutes = this.filterRoutes();
     const filteredAirlines = this.filterAirlines();
     const filteredAirports = this.filterAirports();
-
-    const filteredRoutes = this.filterRoutes();
-
 
     return (
       <div className="app">
