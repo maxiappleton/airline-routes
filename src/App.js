@@ -3,6 +3,7 @@ import _ from 'lodash';
 import './App.css';
 
 import data, { getAirportByCode, getAirlineById } from './data';
+import Map from './components/Map';
 import Table from './components/Table';
 import Select from './components/Select';
 
@@ -18,7 +19,6 @@ class App extends Component {
     this.handleAirlineSelect = this.handleAirlineSelect.bind(this);
     this.handleAirportSelect = this.handleAirportSelect.bind(this);
     this.handleSelectResetClick = this.handleSelectResetClick.bind(this);
-    this.filterRoutes = this.filterRoutes.bind(this);
   }
 
   formatValue = (property, value) => {
@@ -111,6 +111,9 @@ class App extends Component {
           <h1 className="title">Airline Routes</h1>
         </header>
         <section>
+          <Map
+            routes={filteredRoutes}
+          />
           <div className="selection-area">
             Show routes on
             <Select
