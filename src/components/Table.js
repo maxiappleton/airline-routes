@@ -30,7 +30,7 @@ class Table extends Component {
 
     const startIdx = this.state.currPage * this.props.perPage;
     const endIdx = (this.state.currPage + 1) * this.props.perPage;
-    const rowsToDisplay = this.props.rows.slice(startIdx, endIdx);
+    const rowsToDisplay = this.props.rows.length === 0 ? [] : this.props.rows.slice(startIdx, endIdx);
 
     return (
       <div>
@@ -55,7 +55,7 @@ class Table extends Component {
           </tbody>
         </table>
         <div className="pagination">
-          <p>Showing {startIdx + 1}-{endIdx} of {this.props.rows.length} routes</p>
+          <p>Showing {startIdx + 1}-{startIdx + rowsToDisplay.length} of {this.props.rows.length} routes</p>
           <p>
             <button
               onClick={this.handlePrevClick}
@@ -63,7 +63,7 @@ class Table extends Component {
             >Previous Page</button>
             <button
               onClick={this.handleNextClick}
-              disabled={endIdx === this.props.rows.length}
+              disabled={endIdx >= this.props.rows.length}
             >Next Page</button>
           </p>
         </div>
