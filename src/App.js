@@ -10,10 +10,13 @@ class App extends Component {
     super(props);
 
     this.state = {
-      airline: 'all'
+      airline: 'all',
+      airport: 'all'
     };
 
     this.handleAirlineSelect = this.handleAirlineSelect.bind(this);
+    this.handleAirportSelect = this.handleAirportSelect.bind(this);
+    this.handleSelectResetClick = this.handleSelectResetClick.bind(this);
     this.filterRoutes = this.filterRoutes.bind(this);
   }
 
@@ -29,21 +32,46 @@ class App extends Component {
     this.setState({ airline: e.target.value });
   }
 
-  // const routes = [
-  //   { "airline": 24, "src": "DFW", "dest": "XNA" },
+  handleAirportSelect(e) {
+    this.setState({ airport: e.target.value });
+  }
+
+  handleSelectResetClick() {
+    this.setState({ airline: 'all', airport: 'all' });
+  }
 
   filterRoutes() {
-    if (this.state.airline === 'all') {
+    if (this.state.airline === 'all' && this.state.airport === 'all') {
       return data.routes;
-    } else {
+    } else if (this.state.airline === 'all') {
+      return data.routes.filter(route => {
+        return route.src === this.state.airport || route.dest === this.state.airport;
+      });
+    } else if (this.state.airport === 'all') {
       return data.routes.filter(route => {
         return route.airline === Number(this.state.airline);
+      });
+    } else {
+      return data.routes.filter(route => {
+        return route.airline === Number(this.state.airline) && (route.src === this.state.airport || route.dest === this.state.airport);
       });
     }
   }
 
   filterAirlines() {
-    return data.airlines;
+    if (this.state.airport === 'all') {
+      return data.airlines;
+    } else {
+      return data.airlines;
+    }
+  }
+
+  filterAirports() {
+    if (this.state.airline === 'all') {
+      return data.airports;
+    } else {
+      return data.airports;
+    }
   }
 
   render() {
@@ -53,8 +81,12 @@ class App extends Component {
       { name: 'Destination Airport', property: 'dest' },
     ];
 
-    const filteredRoutes = this.filterRoutes();
+
     const filteredAirlines = this.filterAirlines();
+    const filteredAirports = this.filterAirports();
+
+    const filteredRoutes = this.filterRoutes();
+
 
     return (
       <div className="app">
@@ -62,14 +94,27 @@ class App extends Component {
           <h1 className="title">Airline Routes</h1>
         </header>
         <section>
-          <Select
-            options={filteredAirlines}
-            valueKey="id"
-            titleKey="name"
-            allTitle="All Airlines"
-            value={this.state.airline}
-            onSelect={this.handleAirlineSelect}
-          />
+          <div className="selection-area">
+            Show routes on
+            <Select
+              options={filteredAirlines}
+              valueKey="id"
+              titleKey="name"
+              allTitle="All Airlines"
+              value={this.state.airline}
+              onSelect={this.handleAirlineSelect}
+            />
+            flying into or out of
+            <Select
+              options={filteredAirports}
+              valueKey="code"
+              titleKey="name"
+              allTitle="All Airports"
+              value={this.state.airport}
+              onSelect={this.handleAirportSelect}
+            />
+            <button onClick={this.handleSelectResetClick}>Show All Routes</button>
+          </div>
           <Table
             columns={columns}
             rows={filteredRoutes}

@@ -18,6 +18,10 @@ section {
   text-align: center;
 }
 
+.selection-area {
+  margin: 2rem 0;
+}
+
 table.routes-table {
   border-collapse: collapse;
   margin: 0 auto;
