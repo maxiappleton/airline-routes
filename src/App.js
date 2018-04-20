@@ -19,6 +19,7 @@ class App extends Component {
     this.handleAirlineSelect = this.handleAirlineSelect.bind(this);
     this.handleAirportSelect = this.handleAirportSelect.bind(this);
     this.handleSelectResetClick = this.handleSelectResetClick.bind(this);
+    this.handleMapAirportClick = this.handleMapAirportClick.bind(this);
   }
 
   formatValue = (property, value) => {
@@ -39,6 +40,10 @@ class App extends Component {
 
   handleSelectResetClick() {
     this.setState({ airline: 'all', airport: 'all' });
+  }
+
+  handleMapAirportClick(code) {
+    this.setState({ airport: code });
   }
 
   filterRoutes() {
@@ -113,7 +118,9 @@ class App extends Component {
         <section>
           <Map
             routes={filteredRoutes}
+            onMapAirportClick={this.handleMapAirportClick}
           />
+          <p>(Hover over airport for name, click to filter)</p>
           <div className="selection-area">
             Show routes on
             <Select

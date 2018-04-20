@@ -55,7 +55,7 @@ select {
 }
 
 svg circle:hover {
-  cursor: crosshair;
+  cursor: pointer;
 }
 
 svg path {
@@ -67,10 +67,10 @@ svg circle.destination {
   stroke: red;
   stroke-width: .3;
   fill: transparent;
-  r: 0.8;
+  r: 1.5;
 }
 
 svg circle.source {
   fill: lightgreen;
-  r: 0.5;
+  r: 1.5;
 }

@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import { getLatLongByCode } from './../data';
+import AirportMarker from './AirportMarker';
 
 class Map extends Component {
+  handleAirportClick(e) {
+    console.log(e.target);
+  }
+
   render() {
     return (
       <svg className="map" viewBox="-180 -90 360 180">
@@ -10,23 +15,26 @@ class Map extends Component {
           {this.props.routes.map(route => {
             const [srcLat, srcLong] = getLatLongByCode(route.src);
             const [destLat, destLong] = getLatLongByCode(route.dest);
-
             return (
               <g key={JSON.stringify(route) + 'MAP'}>
-                <circle className="source" cx={srcLong} cy={srcLat}>
-                  <title></title>
-                </circle>
-                <circle className="destination" cx={destLong} cy={destLat}>
-                  <title></title>
-                </circle>
+                <AirportMarker
+                  code={route.src}
+                  type="source"
+                  cx={srcLong}
+                  cy={srcLat}
+                  onMapAirportClick={this.props.onMapAirportClick}
+                />
+                <AirportMarker
+                  code={route.dest}
+                  type="destination"
+                  cx={destLong}
+                  cy={destLat}
+                  onMapAirportClick={this.props.onMapAirportClick}
+                />
                 <path d={`M${srcLong} ${srcLat} L ${destLong} ${destLat}`} />
               </g>
             );
           })}
-          {/* for each route */}
-          {/*  */}
-          {/* end route */}
-
         </g>
       </svg>
     );
