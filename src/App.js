@@ -66,24 +66,24 @@ class App extends Component {
 
   filterAirlines() {
     if (this.state.airport === 'all') {
-      return data.airlines;
+      return _.sortBy(data.airlines, 'name');
     } else {
       const possibleRoutes = data.routes.filter(route => {
         return route.src === this.state.airport || route.dest === this.state.airport;
       });
-
       const airlineIds = possibleRoutes.map(route => route.airline);
       const uniqAirlineIds = _.uniq(airlineIds);
-
-      return data.airlines.filter(airline => {
+      const airlines = data.airlines.filter(airline => {
         return uniqAirlineIds.includes(airline.id);
       });
+
+      return _.sortBy(airlines, 'name');
     }
   }
 
   filterAirports() {
     if (this.state.airline === 'all') {
-      return data.airports;
+      return _.sortBy(data.airports, 'name');
     } else {
       const possibleRoutes = data.routes.filter(route => {
         return route.airline === Number(this.state.airline);
@@ -92,10 +92,11 @@ class App extends Component {
       const airportCodes = [];
       possibleRoutes.forEach(route => airportCodes.push(route.src, route.dest));
       const uniqAirportCodes = _.uniq(airportCodes);
-
-      return data.airports.filter(airport => {
+      const airports = data.airports.filter(airport => {
         return uniqAirportCodes.includes(airport.code);
       });
+
+      return _.sortBy(airports, 'name');
     }
   }
 
@@ -131,6 +132,7 @@ class App extends Component {
               value={this.state.airline}
               onSelect={this.handleAirlineSelect}
             />
+            <span className="select-count">({filteredAirlines.length}) </span>
             flying into or out of
             <Select
               options={filteredAirports}
@@ -140,6 +142,7 @@ class App extends Component {
               value={this.state.airport}
               onSelect={this.handleAirportSelect}
             />
+            <span className="select-count">({filteredAirports.length}) </span>
             <button onClick={this.handleSelectResetClick}>Show All Routes</button>
           </div>
           <Table

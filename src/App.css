@@ -50,6 +50,13 @@ select {
   width: 90%;
 }
 
+.select-count {
+  font-size: 0.8rem;
+  color: grey;
+  font-weight: bold;
+  margin: 0 0.2rem;
+}
+
 .pagination a {
   margin: 0 .5em;
 }
